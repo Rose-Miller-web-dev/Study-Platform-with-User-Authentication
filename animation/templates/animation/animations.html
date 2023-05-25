@@ -1,0 +1,51 @@
+
+<style>
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+
+    .browser {
+        margin-right: 20%;
+    }
+
+    .animations {
+        margin-top: 10%;
+    }
+</style>
+
+<div class="container">
+    {% include 'animation/navbar.html' %}
+    <div class="browser">
+        <h2>Browse animations!</h2>
+        <form action="{% url 'animations' %}" method="GET">
+            {% csrf_token %}
+            <input type="text" name="q" placeholder="search animation...">
+        </form>
+
+        <a href="{% url 'animations' %}">All</a>
+        <hr>
+        {% for y in animations %}
+            <a href="{% url 'animations' %}?q={{ y.year }}">{{ y.year }}</a>
+            <hr>
+        {% endfor %}
+    </div>
+    
+    <div class="animations">
+        <h3>there are {{ counter }} animations : </h3>
+        {% for a in animations %}
+        <div class="">
+            <a href="{% url 'info' a.id %}">{{ a.name }}</a>
+            <br><br><br>
+                {% if request.user == a.user %}
+                    <a href="{% url 'edit' a.id %}">Edit</a>
+                    <br>
+                    <a href="{% url 'delete' a.id %}">Delete</a>
+                {% endif %}
+            <hr>
+        </div>
+        {% endfor %} 
+    </div>
+</div>
+
+<a href="{% url 'create' %}">create one!</a>

@@ -1,0 +1,28 @@
+
+{% if page == 'signup' %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="signup">
+    </form>
+{% endif %}
+
+{% if page == 'login' %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="username">username</label>
+    <input type="text" name="username">
+
+    <label for="password">password</label>
+    <input type="password" name="password">
+
+    <input type="submit" value="login">
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</form>
+{% endif %}

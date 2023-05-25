@@ -1,0 +1,77 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+</head>
+
+<style>
+    .container{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .topics{
+        margin-right: 10%;
+    }
+
+    .feed{
+        margin-left: 10%;
+    }
+
+</style>
+
+<div class="container">
+
+    <a href="{% url 'roomlist_login' %}">login</a>
+    <div class="topics">
+        <h2>Browse topics</h2>
+
+        <form action="{% url 'roomlist' %}" method="GET">
+            {% csrf_token %}
+
+            <input type="text" name="q" placeholder="search...">
+            <br>
+        </form>
+
+        <a href="{% url 'roomlist' %}">All</a>
+        <hr>
+        {% for r in rooms %}
+            <a href="{% url 'roomlist' %}?q={{ r.name }}">{{ r.name }}</a>
+            <hr>
+        {% endfor %}
+    </div>
+
+    <div class="rooms">
+        <h2>Rooms</h2>
+        <hr>
+        {% for r in rooms %}
+            @{{ r.host }}
+            <br>
+            <a href="{% url 'room_info' r.id %}">{{ r.name }}</a>
+            
+            <br>
+            {% if request.user == r.host %}
+                <a href="/">Delete</a>
+                <br>
+                <a href="/">Edit</a>
+            {% endif %}
+            <br>
+            <hr>
+        {% endfor %}
+    </div>
+
+    <div class="feed">
+        <h2>Recent Activites</h2>
+        <hr>
+        {% for rm in room_messages %}
+            <small>replied to "{{ rm.room }}"</small>
+            <small>{{ rm.updated|timesince }} ago</small>
+            <small>@ <a href="{% url 'profile' rm.user.id %}">{{ rm.user.username }}</a></small>
+            <p>{{ rm.text }}</p>
+            {% if request.user == rm.user %}
+                <a href="{% url 'delete-message' rm.id %}">delete</a>
+            {% endif %}
+            <hr>
+        {% endfor %}        
+    </div>
+</div>
+

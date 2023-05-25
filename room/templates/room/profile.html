@@ -1,0 +1,64 @@
+
+<style>
+    .container{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .rooms{
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+</style>
+
+<div class="container">
+    <div class="browser">
+        <h5>{{ user.username }}</h5>
+        <h3>Browse</h3>
+
+        <form action="{% url 'profile' request.user.id %}" method="GET">
+            {% csrf_token %}
+            <input type="text" name="q" placeholder="search...">
+        </form>
+
+        <a href="{% url 'profile' request.user.id %}">All</a>
+        <hr>
+        {% for ar in all_rooms %}
+            <a href="{% url 'profile' request.user.id %}?q={{ar.name}}">{{ar.name}}</a>
+            <hr>
+        {% endfor %}
+    </div>
+
+    <div class="rooms">
+        {% for r in rooms %}
+            {{ r.name }}
+            <hr>
+        {% endfor %}
+
+        <h3>what you recently sent!</h3>
+        <br>
+        {% for rm in room_messages %}
+            {% if request.user == rm.user %}
+                <small>{{ rm.updated|timesince }} ago</small>
+                <small>{{ rm.room.name }}</small>
+                <p>{{ rm.text }}</p>
+                <hr>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="feed">
+        <h2>activity feed</h2>
+        {% for rm in all_messages %}
+            <small>replied to "{{ rm.room }}"</small>
+            <small>{{ rm.updated|timesince }} ago</small>
+            <small>@ <a href="{% url 'profile' rm.user.id %}">{{ rm.user.username }}</a></small>
+            <p>{{ rm.text }}</p>
+            {% if request.user == rm.user %}
+                <a href="{% url 'delete-message' rm.id %}">delete</a>
+            {% endif %}
+            <hr>
+        {% endfor %}   
+    </div>
+</div>

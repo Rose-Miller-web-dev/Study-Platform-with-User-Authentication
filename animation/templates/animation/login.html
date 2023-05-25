@@ -1,0 +1,45 @@
+{% if page == 'login' %}
+<form method="POST" action="" >
+    {% csrf_token %}
+
+    <label for="username">Username :</label>
+    <input type="text" name="username" >
+
+    <label for="password">password :</label>
+    <input type="password" name="password" >
+
+    <input type="submit" value="login">
+    <p>Haven't you signed up yet?</p>
+    <br>
+    <a href="{% url 'signup' %}">Sign up</a>
+<!-- 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %} -->
+</form>
+{% endif %}
+
+{% if page == 'signup' %}
+<form method="POST" action="" >
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Signup">
+    <p>Already have an account?</p>
+    <br>
+    <a href="{% url 'login' %}">Login</a>
+</form>
+{% endif %}
+
+{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}

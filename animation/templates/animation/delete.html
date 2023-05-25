@@ -1,0 +1,9 @@
+{% include 'animation/navbar.html' %}
+<p>Are you sure you wanna delete {{ animation.name }}?</p>
+
+<a href="{{ request.META.HTTP_REFERER }}">Ofcourse not bitch!</a>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Sure!">
+</form>
